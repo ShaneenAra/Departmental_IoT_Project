@@ -1,0 +1,67 @@
+#include <Servo.h> //import library
+Servo myservo; 
+#define BUTTON_PIN 2 
+const int ledRed = 4;
+const int ledGreen = 5;
+const int ledYellow = 6;
+
+// Motor pin connections
+int enA = 10;//grey & black
+int in1 = 12;//yellow & Brown
+int in2 = 9;//violate & red
+
+
+void setup()
+{
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  pinMode(ledGreen, OUTPUT);  
+  pinMode(ledYellow, OUTPUT);
+  pinMode(ledRed, OUTPUT); 
+  myservo.attach(3, 500, 2500); 
+  //gear motor setup
+  pinMode(enA, OUTPUT);
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW); 
+  
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  int button= digitalRead(BUTTON_PIN);
+ if(button!=1){
+   Serial.println("button pushed");
+   delay(1000);
+   digitalWrite(ledGreen, LOW); 
+   //Yellow Light
+  for(int i=0;i<3;i++){
+    digitalWrite(ledYellow, HIGH); 
+    delay(2000);
+    digitalWrite(ledYellow, LOW);  
+    delay(500);
+    } 
+    //Red Light 
+    digitalWrite(ledRed, HIGH);   
+    delay(10);
+    myservo.write(0);
+    
+    analogWrite(enA, 255);
+    // Turn on motor A & B
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    
+    delay(12000);
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, LOW);               
+    digitalWrite(ledRed, LOW);    
+    myservo.write(90);
+    digitalWrite(ledGreen, HIGH);
+    delay(20000); 
+    }
+    else{
+     //myservo.write(90); // Rotate Servo by 180 degree
+    digitalWrite(ledGreen, HIGH); 
+  }
+}
